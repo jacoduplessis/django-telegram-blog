@@ -1,0 +1,8 @@
+<div>
+  <figure>
+    <img src="{{ entry.photo_url }}">
+    {% if entry.message.caption %}
+    <figcaption>{{ entry.message.caption }}</figcaption>
+    {% endif %}
+  </figure>
+</div>

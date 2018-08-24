@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <style>
+    img {
+      max-width: 100%;
+    }
+    .entry {
+      background-color: whitesmoke;
+      padding: 1rem;
+      margin: 1rem 0;
+    }
+  </style>
+</head>
+<body>
+
+{{ blog.title }}
+
+<p>Entries: </p>
+
+{% for entry in entries %}
+
+  <div class="entry">
+    <time>{{ entry.message_time }}</time>
+    {% include entry.template with entry=entry %}
+  </div>
+
+{% endfor %}
+</body>
+</html>
