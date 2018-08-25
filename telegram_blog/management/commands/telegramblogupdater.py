@@ -20,9 +20,7 @@ class Command(BaseCommand):
             pass
 
         while True:
-            r = request('getUpdates', params=dict(timeout=60, offset=offset+1))
-            r.raise_for_status()
-            response = r.json()
+            response = request('getUpdates', data=dict(timeout=60, offset=offset+1))
             if not response.get('ok'):
                 self.stdout.write(response.get('description'))
 

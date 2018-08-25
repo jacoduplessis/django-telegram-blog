@@ -1,10 +1,9 @@
 from telegram_blog.utils import request
-from .utils import get_bot_token
+from .utils import get_bot_token, session
 from .models import Blog, Entry
 from datetime import datetime, timezone
 import json
 import logging
-from requests import Session
 from io import BytesIO
 
 logger = logging.getLogger(__name__)
@@ -67,7 +66,7 @@ def process_update(update):
             message_time=datetime.fromtimestamp(message['date'], tz=timezone.utc)
         )
 
-        entry.save_media_files()
+        entry.store_media_files()
 
     else:
         logger.info('Receieved update that is not a message')
@@ -75,7 +74,7 @@ def process_update(update):
 
 
 def get_telegram_file_download_link(file_id):
-    data = request('getFile', params=dict(file_id=file_id))
+    data = request('getFile', data=dict(file_id=file_id))
     file_path = data['result']['file_path']
     token = get_bot_token()
     return f'https://api.telegram.org/file/bot{token}/{file_path}'
