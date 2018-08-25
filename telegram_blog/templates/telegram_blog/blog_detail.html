@@ -1,0 +1,26 @@
+{% extends 'telegram_blog/base.html' %}
+
+{% block title %}{{ blog.title }}{% endblock %}
+
+{% block content %}
+
+  <div style="text-align: center">
+    {% if blog.photo_url_small %}
+      <img src="{{ blog.photo_url_small }}">
+    {% endif %}
+    <h1>{{ blog.title }}</h1>
+  </div>
+  <hr style="max-width: 300px; color: #ccc">
+
+  {% for entry in entries %}
+
+    <div class="entry entry-{{ entry.type }}">
+      <time><strong>{{ entry.message_time }}</strong></time>
+      {% include entry.template with entry=entry %}
+    </div>
+
+  {% endfor %}
+
+  <hr style="max-width: 300px; color: #ccc">
+  <p style="text-align: center; margin: 2rem auto"><a href="{% url 'telegram_blog:index' %}">view other blogs</a></p>
+{% endblock content %}

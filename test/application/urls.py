@@ -20,5 +20,5 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('blog/', include('django_telegram_blog.urls', namespace='telegram_blog'))
+    path('blog/', include('telegram_blog.urls', namespace='telegram_blog'))
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

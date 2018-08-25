@@ -8,10 +8,10 @@ setup(
     license="MIT",
     description="Blogging for Django via Telegram",
     author="Jaco du Plessis",
-    author_email="jaco@jacoduplessis.co.za",  # SEE NOTE BELOW (*)
-    packages=['django_telegram_blog'],
+    author_email="jaco@jacoduplessis.co.za",
+    packages=['telegram_blog'],
     package_data={
-        'django_telegram_blog': [
+        'telegram_blog': [
             'template/*.html',
             'static/*.js',
         ]

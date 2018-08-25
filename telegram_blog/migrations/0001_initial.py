@@ -30,7 +30,7 @@ class Migration(migrations.Migration):
                 ('update', models.TextField()),
                 ('type', models.CharField(choices=[('video', 'video'), ('photo', 'photo'), ('document', 'document'), ('audio', 'audio'), ('animation', 'animation'), ('sticker', 'sticker'), ('video_note', 'video_note'), ('contact', 'contact'), ('location', 'location'), ('venue', 'venue'), ('text', 'text')], default='text', max_length=30)),
                 ('message_time', models.DateTimeField()),
-                ('blog', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='entries', to='django_telegram_blog.Blog')),
+                ('blog', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='entries', to='telegram_blog.Blog')),
             ],
             options={
                 'verbose_name': 'Entry',

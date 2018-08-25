@@ -1,5 +1,6 @@
 from django.core.management.base import BaseCommand
-from django_telegram_blog.telegram import process_update, session, get_bot_token
+from telegram_blog.telegram import process_update
+from telegram_blog.utils import get_bot_token, request
 from django.conf import settings
 
 
@@ -9,16 +10,17 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
 
         offset = 0
-        token = get_bot_token()
 
-        url = f"https://api.telegram.org/bot{token}/getUpdates"
+        r = request('deleteWebhook')
+        self.stdout.write(f"deleteWebhook: {r}")
 
         if settings.DEBUG:
+
             # self.stdout.write(session.get(f"https://api.telegram.org/bot{token}/getMe").text)
             pass
 
         while True:
-            r = session.get(url, params=dict(timeout=60, offset=offset+1))
+            r = request('getUpdates', params=dict(timeout=60, offset=offset+1))
             r.raise_for_status()
             response = r.json()
             if not response.get('ok'):

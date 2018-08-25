@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'django_telegram_blog',
+    'telegram_blog',
 ]
 
 MIDDLEWARE = [
@@ -120,6 +120,9 @@ STATIC_URL = '/static/'
 
 TELEGRAM_BLOG_BOT_TOKEN = os.environ.get('TELEGRAM_BLOG_BOT_TOKEN')
 TELEGRAM_BLOG_URL = None
+TELEGRAM_BLOG_USE_WEBHOOK = False
+TELEGRAM_BLOG_WEBHOOK_MAX_CONNECTIONS = 1
+
 
 LOGGING = {
     'version': 1,
@@ -134,7 +137,7 @@ LOGGING = {
             'handlers': ['console'],
             'level': 'INFO',
         },
-        'django_telegram_blog': {
+        'telegram_blog': {
             'handlers': ['console'],
             'level': 'DEBUG',
         },
