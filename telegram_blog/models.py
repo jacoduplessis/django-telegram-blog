@@ -5,6 +5,7 @@ from django.core.files.storage import default_storage
 from django.db import models
 from django.utils.functional import cached_property
 from django.conf import settings
+import magic
 
 
 class Blog(models.Model):
@@ -27,6 +28,7 @@ class Blog(models.Model):
     description = models.TextField(blank=True)
     telegram_small_photo_id = models.CharField(max_length=300, blank=True)
     telegram_big_photo_id = models.CharField(max_length=300, blank=True)
+    extension = models.CharField(blank=True, max_length=100)
 
     class Meta:
         verbose_name = 'Blog'
@@ -36,16 +38,20 @@ class Blog(models.Model):
         return self.title
 
     def media_path(self, file_id):
-        return f"telegram_blog/{self.telegram_chat_id}/{file_id}"
+        return f"telegram_blog/{self.telegram_chat_id}/{file_id}.{self.extension}"
 
     def file_url(self, file_id):
         media_url = getattr(settings, 'MEDIA_URL')
         path = self.media_path(file_id)
         return media_url + path
 
-    def _save_media(self, file_id):
+    def store_media(self, file_id):
         from .telegram import get_telegram_file_content
         content = get_telegram_file_content(file_id)
+        extension = magic.from_buffer(content.read(), mime=True).split('/')[-1]
+        content.seek(0)
+        self.extension = extension
+        # self.save() is called in update_from_chat
         path = self.media_path(file_id)
         default_storage.save(path, content)
 
@@ -57,8 +63,8 @@ class Blog(models.Model):
         if 'photo' in data:
             self.telegram_big_photo_id = data['photo']['big_file_id']
             self.telegram_small_photo_id = data['photo']['small_file_id']
-            self._save_media(self.telegram_small_photo_id)
-            self._save_media(self.telegram_big_photo_id)
+            self.store_media(self.telegram_small_photo_id)
+            self.store_media(self.telegram_big_photo_id)
         self.save()
 
     @cached_property
@@ -114,6 +120,7 @@ class Entry(models.Model):
     type = models.CharField(choices=TYPE_CHOICES, max_length=30, default=TEXT)
     message_time = models.DateTimeField()
     edited = models.BooleanField(default=False)
+    extension = models.CharField(max_length=100, blank=True)
 
     def __str__(self):
         return f'{self.blog_id} {self.telegram_message_id}'
@@ -133,10 +140,13 @@ class Entry(models.Model):
     def media_path(self, file_id):
         return f"telegram_blog/{self.blog.telegram_chat_id}/{file_id}"
 
-    def _save_media(self, file_id):
+    def store_media(self, file_id, extension=None):
         from .telegram import get_telegram_file_content
         content = get_telegram_file_content(file_id)
-        path = self.media_path(file_id)
+        if extension is None:
+            extension = magic.from_buffer(content.read(), mime=True).split('/')[-1]
+            content.seek(0)
+        path = self.media_path(file_id) + '.' + extension
         default_storage.save(path, content)
 
     @cached_property
@@ -157,13 +167,29 @@ class Entry(models.Model):
         return self.file_url(file_id)
 
     @cached_property
+    def file_ids(self):
+        if self.type == Entry.PHOTO:
+            return [x['file_id'] for x in self.message['photo']]
+        elif self.type in (Entry.AUDIO,
+                           Entry.VOICE,
+                           Entry.DOCUMENT,
+                           Entry.STICKER,):
+            return [self.message[self.type]['file_id']]
+        elif self.type in (Entry.VIDEO_NOTE, Entry.VIDEO):
+            return [
+                self.message[self.type]['file_id'],
+                self.message[self.type]['thumb']['file_id'],
+            ]
+        return []
+
+    @cached_property
     def photo_url_largest(self):
         if self.type != Entry.PHOTO:
             return ''
         file_id = self.message['photo'][-1]['file_id']
         return self.file_url(file_id)
 
-    def file_url(self, file_id=None):
+    def file_url(self, file_id=None, extension=None):
 
         if file_id is None:
             if self.type not in (
@@ -171,12 +197,17 @@ class Entry(models.Model):
                     Entry.VIDEO_NOTE,
                     Entry.VIDEO,
                     Entry.VOICE,
-                    Entry.DOCUMENT):
+                    Entry.DOCUMENT,
+                    Entry.STICKER):
                 return ''
 
             file_id = self.message[self.type]['file_id']
         media_url = getattr(settings, 'MEDIA_URL')
         path = self.media_path(file_id)
+        if extension is None:
+            extension = self.extension
+        if extension:
+            path += f'.{extension}'
         return media_url + path
 
     @cached_property
@@ -186,24 +217,27 @@ class Entry(models.Model):
         if 'thumb' not in self.message[self.type]:
             return ''
         file_id = self.message[self.type]['thumb']['file_id']
-        return self.file_url(file_id)
+        return self.file_url(file_id, 'jpeg')
 
-    def save_media_files(self):
+    def store_media_files(self):
         if self.type == Entry.PHOTO:
             for photo_size in self.message['photo']:
                 file_id = photo_size['file_id']
-                self._save_media(file_id)
+                self.store_media(file_id)
         if self.type == Entry.AUDIO:
-            self._save_media(self.message['audio']['file_id'])
+            self.store_media(self.message['audio']['file_id'])
         if self.type == Entry.VIDEO:
-            self._save_media(self.message['video']['file_id'])
+            self.store_media(self.message['video']['file_id'])
             if 'thumb' in self.message['video']:
-                self._save_media(self.message['video']['thumb']['file_id'])
+                self.store_media(self.message['video']['thumb']['file_id'], extension='jpeg')
         if self.type == Entry.VIDEO_NOTE:
-            self._save_media(self.message['video_note']['file_id'])
+            self.store_media(self.message['video_note']['file_id'])
             if 'thumb' in self.message['video_note']:
-                self._save_media(self.message['video_note']['thumb']['file_id'])
+                self.store_media(self.message['video_note']['thumb']['file_id'], extension='jpeg')
         if self.type == Entry.VOICE:
-            self._save_media(self.message['voice']['file_id'])
+            self.store_media(self.message['voice']['file_id'])
         if self.type == Entry.DOCUMENT:
-            self._save_media(self.message['document']['file_id'])
+            extension = self.message['document'].get('file_name')
+            self.store_media(self.message['document']['file_id'], extension)
+        if self.type == Entry.STICKER:
+            self.store_media(self.message['sticker']['file_id'])
