@@ -36,5 +36,5 @@ a webserver with SSL to use this, or use a tool like ngrok (for testing).
 
 ### To Do
 
-- message replies
 - entry deletion
+- no webp/sticker in firefox
