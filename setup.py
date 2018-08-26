@@ -1,6 +1,4 @@
-from setuptools import setup
-
-
+from setuptools import setup, find_packages
 
 setup(
     name="django-telegram-blog",
@@ -9,11 +7,10 @@ setup(
     description="Blogging for Django via Telegram",
     author="Jaco du Plessis",
     author_email="jaco@jacoduplessis.co.za",
-    packages=['telegram_blog'],
+    packages=find_packages(),
     package_data={
         'telegram_blog': [
-            'template/*.html',
-            'static/*.js',
+            'templates/telegram_blog/*.html',
         ]
     },
     install_requires=[
