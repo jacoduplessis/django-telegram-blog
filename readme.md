@@ -3,6 +3,10 @@
 
 ### Getting Started
 
+```
+pip install django-telegram-blog
+```
+
 In `settings.py`:
 
 ```
