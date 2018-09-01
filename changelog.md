@@ -1,3 +1,9 @@
+### 0.4.1
+
+**01/09/2018**
+
+- Remove namespacing in templates
+
 ### 0.4.0
 
 **01/09/2018**
