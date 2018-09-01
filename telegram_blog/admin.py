@@ -1,3 +1,14 @@
 from django.contrib import admin
+from .models import Blog, Entry
 
-# Register your models here.
+
+class BlogAdmin(admin.ModelAdmin):
+    pass
+
+
+class EntryAdmin(admin.ModelAdmin):
+    pass
+
+
+admin.site.register(Blog, BlogAdmin)
+admin.site.register(Entry, EntryAdmin)
