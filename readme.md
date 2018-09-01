@@ -42,3 +42,4 @@ a webserver with SSL to use this, or use a tool like ngrok (for testing).
 
 - entry deletion
 - no webp/sticker in firefox
+- django admin
