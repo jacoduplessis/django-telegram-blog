@@ -123,7 +123,6 @@ TELEGRAM_BLOG_URL = None
 TELEGRAM_BLOG_USE_WEBHOOK = False
 TELEGRAM_BLOG_WEBHOOK_MAX_CONNECTIONS = 1
 
-
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,

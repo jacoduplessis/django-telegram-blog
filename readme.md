@@ -35,7 +35,7 @@ You have two choices:
 
 1. run `manage.py telegramblogupdater`. This is intented to ease developement but can be used
 in production.
-2. set `TELEGRAM_BLOG_USE_WEBHOOK = True` in settings. You need to run
+2. set `TELEGRAM_BLOG_USE_WEBHOOK = True` in settings and run `manage.py telegramblogsetwebhook`. You need to run
 a webserver with SSL to use this, or use a tool like ngrok (for testing).
 
 ### To Do
