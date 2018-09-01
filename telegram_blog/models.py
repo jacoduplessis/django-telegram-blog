@@ -8,6 +8,7 @@ from django.conf import settings
 import magic
 from pathlib import Path
 
+
 class Blog(models.Model):
     PRIVATE = 'private'
     GROUP = 'group'

@@ -43,3 +43,4 @@ a webserver with SSL to use this, or use a tool like ngrok (for testing).
 - entry deletion
 - no webp/sticker in firefox
 - django admin
+- group without message (created on bot add) does not have attr message_time
