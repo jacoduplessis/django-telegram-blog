@@ -6,7 +6,7 @@ from django.db import models
 from django.utils.functional import cached_property
 from django.conf import settings
 import magic
-
+from pathlib import Path
 
 class Blog(models.Model):
     PRIVATE = 'private'
@@ -140,12 +140,15 @@ class Entry(models.Model):
     def media_path(self, file_id):
         return f"telegram_blog/{self.blog.telegram_chat_id}/{file_id}"
 
-    def store_media(self, file_id, extension=None):
+    def store_media(self, file_id, extension=None, save_extension=True):
         from .telegram import get_telegram_file_content
         content = get_telegram_file_content(file_id)
         if extension is None:
             extension = magic.from_buffer(content.read(), mime=True).split('/')[-1]
             content.seek(0)
+        if extension and save_extension and not self.extension:
+            self.extension = extension
+            self.save()
         path = self.media_path(file_id) + '.' + extension
         default_storage.save(path, content)
 
@@ -229,15 +232,16 @@ class Entry(models.Model):
         if self.type == Entry.VIDEO:
             self.store_media(self.message['video']['file_id'])
             if 'thumb' in self.message['video']:
-                self.store_media(self.message['video']['thumb']['file_id'], extension='jpeg')
+                self.store_media(self.message['video']['thumb']['file_id'], extension='jpeg', save_extension=False)
         if self.type == Entry.VIDEO_NOTE:
             self.store_media(self.message['video_note']['file_id'])
             if 'thumb' in self.message['video_note']:
-                self.store_media(self.message['video_note']['thumb']['file_id'], extension='jpeg')
+                self.store_media(self.message['video_note']['thumb']['file_id'], extension='jpeg', save_extension=False)
         if self.type == Entry.VOICE:
             self.store_media(self.message['voice']['file_id'])
         if self.type == Entry.DOCUMENT:
-            extension = self.message['document'].get('file_name')
+            file_name = self.message['document'].get('file_name')
+            extension = "".join(Path(file_name).suffixes).lstrip(".")
             self.store_media(self.message['document']['file_id'], extension)
         if self.type == Entry.STICKER:
             self.store_media(self.message['sticker']['file_id'])
