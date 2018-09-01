@@ -26,7 +26,7 @@ def get_webhook_hash():
 
 
 def get_webhook_path():
-    return reverse('telegram_blog:webhook')
+    return reverse('webhook', urlconf='telegram_blog.urls')
 
 
 def get_webhook_url():
