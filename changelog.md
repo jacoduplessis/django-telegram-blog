@@ -1,3 +1,7 @@
+### 0.5.0
+
+- remove TELEGRAM_BLOG_USE_WEBHOOK setting
+
 ### 0.4.2
 
 **01/09/2018**

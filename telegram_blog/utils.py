@@ -14,14 +14,13 @@ session = Session()
 
 
 def get_bot_token():
-    token = getattr(settings, 'TELEGRAM_BLOG_BOT_TOKEN')  # type: str
-    if token is None:
-        raise RuntimeError('TELEGRAM_BLOG_BOT_TOKEN setting is empty')
-    return token
+    return getattr(settings, 'TELEGRAM_BLOG_BOT_TOKEN')  # type: str
 
 
 def get_webhook_hash():
     token = get_bot_token()
+    if token is None:
+        return 'test'
     return md5(token.encode()).hexdigest()
 
 

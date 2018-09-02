@@ -8,8 +8,6 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
 
-        if not getattr(settings, 'TELEGRAM_BLOG_USE_WEBHOOK'):
-            self.stdout.write('warning: setting webhook while TELEGRAM_BLOG_USE_WEBHOOK is False')
         max_connections = getattr(settings, 'TELEGRAM_BLOG_WEBHOOK_MAX_CONNECTIONS', 40)
         webhook_url = get_webhook_url()
         data = request('getWebhookInfo').get('result')
@@ -21,6 +19,7 @@ class Command(BaseCommand):
                 'max_connections': max_connections
             })
             self.stdout.write(f'setWebhook response: {response}')
-
+        else:
+            self.stdout.write('webhook config unchanged')
 
 
