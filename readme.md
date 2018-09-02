@@ -33,10 +33,8 @@ Each message sent creates a new `Entry` model.
 
 You have two choices:
 
-1. run `manage.py telegramblogupdater`. This is intented to ease developement but can be used
-in production.
-2. set `TELEGRAM_BLOG_USE_WEBHOOK = True` in settings and run `manage.py telegramblogsetwebhook`. You need to run
-a webserver with SSL to use this, or use a tool like ngrok (for testing).
+1. Run `manage.py telegramblogupdater`. This is intended to ease developement but can be used in production.
+2. Run the app on a publicly accessible HTTPS URL (use ngrok for dev) and run `manage.py telegramblogsetwebhook`.
 
 ### To Do
 
@@ -44,3 +42,5 @@ a webserver with SSL to use this, or use a tool like ngrok (for testing).
 - no webp/sticker in firefox
 - django admin
 - group without message (created on bot add) does not have attr message_time
+- file storage as celery task
+- pagination

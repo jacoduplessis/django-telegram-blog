@@ -1,6 +1,9 @@
 ### 0.5.0
 
+**Unreleased**
+
 - remove TELEGRAM_BLOG_USE_WEBHOOK setting
+- template updates
 
 ### 0.4.2
 
