@@ -3,11 +3,27 @@ from .models import Blog, Entry
 
 
 class BlogAdmin(admin.ModelAdmin):
-    pass
+    list_display = [
+        'title',
+        'type',
+        'time_created',
+    ]
+
+    date_hierarchy = 'time_created'
 
 
 class EntryAdmin(admin.ModelAdmin):
-    pass
+    list_display = [
+        'telegram_message_id',
+        'blog_id',
+        'type',
+        'message_time',
+    ]
+
+    date_hierarchy = 'message_time'
+    readonly_fields = [
+        'file_ids',
+    ]
 
 
 admin.site.register(Blog, BlogAdmin)
