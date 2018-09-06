@@ -18,11 +18,16 @@ class EntryAdmin(admin.ModelAdmin):
         'blog_id',
         'type',
         'message_time',
+        'edited',
     ]
 
     date_hierarchy = 'message_time'
     readonly_fields = [
+        'telegram_message_id',
+        'type',
+        'blog',
         'file_ids',
+        'message_json',
     ]
 
 
