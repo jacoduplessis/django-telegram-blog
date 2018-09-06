@@ -4,6 +4,7 @@ from .models import Blog, Entry
 from .telegram import process_update
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
+from django.core.paginator import Paginator
 import json
 
 # Create your views here.
@@ -33,7 +34,10 @@ class BlogDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
-        ctx['entries'] = Entry.objects.filter(
+        entries = Entry.objects.filter(
             blog=self.object,
         ).order_by('-message_time')
+        paginator = Paginator(entries, 20)
+        page = self.request.GET.get('page')
+        ctx['entries'] = paginator.get_page(page)
         return ctx
