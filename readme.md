@@ -1,5 +1,8 @@
 # Django Telegram Blog
 
+Running example: [https://reports.hartebees.co.za](https://reports.hartebees.co.za).
+
+To add content, simply start chatting to [@VoxPopBot](https://t.me/VoxPopBot) on Telegram.
 
 ### Getting Started
 
@@ -11,23 +14,22 @@ In `settings.py`:
 
 ```
 TELEGRAM_BLOG_BOT_TOKEN = os.getenv('TELEGRAM_BLOG_BOT_TOKEN', '123')
-TELEGRAM_BLOG_USE_WEBHOOK = False
 TELEGRAM_BLOG_URL = 'https://example.com'  # base URL if using webhooks
 TELEGRAM_BLOG_WEBHOOK_MAX_CONNECTIONS = 40  # see Telegram docs
 ```
 
-In `urls.py`:
+To run the frontend, you need to set the `telegram_blog.urls` as the URL conf for the incoming
+request. This can be done using middleware and setting the `request.urlconf` attribute. 
 
-```
-urlpatterns = [
-   ...,
-   path('/blog/', include('telegram_blog.urls')), 
-]
-```
+> The reason for this is that this project was originally created for hosting 
+> on a subdomain of a Django instance and setting the `urlconf`
+> attribute does not work when using URL namespaces.
 
 Each chat that communicates with the bot will create a new `Blog` model.
 
 Each message sent creates a new `Entry` model.
+
+
 
 ### Getting Updates
 
