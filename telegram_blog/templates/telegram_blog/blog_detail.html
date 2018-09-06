@@ -15,7 +15,7 @@
 
     <div class="entry entry-{{ entry.type }}">
       <div class="entry-meta">
-        <time><strong>{{ entry.message_time }}</strong></time>
+        <time><strong>{{ entry.message_time }} UTC</strong></time>
         {% if blog.type != "private" and entry.message.from %}
           <span>{{ entry.message.from.first_name }}</span>
         {% endif %}
