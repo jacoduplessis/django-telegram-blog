@@ -38,9 +38,9 @@ You have two choices:
 
 ### To Do
 
-- entry deletion
+- entry deletion (login via Telegram Command?)
 - no webp/sticker in firefox
-- group without message (created on bot add) does not have attr message_time
 - file storage as celery task
 - urlize filter should add target="_blank"
-- keep original message time for edited messages
+- analytics
+- update profile pic after change

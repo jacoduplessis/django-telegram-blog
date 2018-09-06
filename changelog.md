@@ -1,3 +1,10 @@
+### 0.6.0
+
+**Unreleased**
+
+- admin: make raw json editable again
+- add "UTC" to message time in template
+
 ### 0.5.1
 
 **06/09/2018**
@@ -16,7 +23,6 @@
 - add some fields in admin 
 - add indexes to database fields
 - add support for channels
-
 
 ### 0.4.2
 
