@@ -22,7 +22,7 @@ class Blog(models.Model):
         (CHANNEL, CHANNEL),
     )
 
-    time_created = models.DateTimeField(auto_now_add=True)
+    time_created = models.DateTimeField(auto_now_add=True, db_index=True)
     telegram_chat_id = models.BigIntegerField()
     title = models.CharField(blank=True, max_length=300)
     type = models.CharField(choices=TYPE_CHOICES, max_length=20, default=PRIVATE)
@@ -82,7 +82,10 @@ class Blog(models.Model):
 
     @cached_property
     def last_updated(self):
-        return self.entries.order_by('-message_time').first().message_time
+        most_recent_message = self.entries.order_by('-message_time').first()
+        if most_recent_message is None:
+            return '---'
+        return most_recent_message.message_time
 
 
 class Entry(models.Model):
@@ -115,11 +118,11 @@ class Entry(models.Model):
     )
 
     time_created = models.DateTimeField(auto_now_add=True)
-    telegram_message_id = models.BigIntegerField()
+    telegram_message_id = models.BigIntegerField(db_index=True)
     blog = models.ForeignKey(Blog, on_delete=models.CASCADE, related_name='entries')
     message_json = models.TextField()
     type = models.CharField(choices=TYPE_CHOICES, max_length=30, default=TEXT)
-    message_time = models.DateTimeField()
+    message_time = models.DateTimeField(db_index=True)
     edited = models.BooleanField(default=False)
     extension = models.CharField(max_length=100, blank=True)
 
