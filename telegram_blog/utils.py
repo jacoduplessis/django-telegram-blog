@@ -37,6 +37,8 @@ def get_webhook_url():
 
 def request(method, data=None):
     token = get_bot_token()
+    if token is None:
+        raise RuntimeError("TELEGRAM_BLOG_BOT_TOKEN is empty")
     url = f"https://api.telegram.org/bot{token}/{method}"
     r = session.post(url, data=data)
     try:
