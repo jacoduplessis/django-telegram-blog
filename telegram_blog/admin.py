@@ -27,7 +27,6 @@ class EntryAdmin(admin.ModelAdmin):
         'type',
         'blog',
         'file_ids',
-        'message_json',
     ]
 
 
