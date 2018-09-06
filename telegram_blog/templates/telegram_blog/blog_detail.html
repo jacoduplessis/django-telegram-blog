@@ -19,6 +19,9 @@
         {% if blog.type != "private" and entry.message.from %}
           <span>{{ entry.message.from.first_name }}</span>
         {% endif %}
+        {% if entry.message.author_signature %}
+        <span>{{ entry.message.author_signature }}</span>
+        {% endif %}
       </div>
 
       {% include entry.template with entry=entry %}

@@ -18,8 +18,8 @@ def get_message_type(message):
 def process_update(update):
     logger.debug("processing update")
 
-    if 'edited_message' in update:
-        edited_message = update['edited_message']
+    if 'edited_message' in update or 'edited_channel_post' in update:
+        edited_message = update.get('edited_message') or update.get('edited_channel_post')
         edited_message_id = edited_message['message_id']
         try:
             existing_entry = Entry.objects.get(
@@ -33,9 +33,9 @@ def process_update(update):
         existing_entry.save()
         return
 
-    elif 'message' in update:
-        message = update['message']
-        chat, user = message['chat'], message['from']
+    elif 'message' in update or 'channel_post' in update:
+        message = update.get('message') or update.get('channel_post')
+        chat, user = message.get('chat'), message.get('from')
         if chat is None:
             logger.info(f'Received update that cannot be processed: {update}')
             return
@@ -69,7 +69,7 @@ def process_update(update):
         entry.store_media_files()
 
     else:
-        logger.info('Receieved update that is not a message')
+        logger.info('Received update that is not a message')
         return
 
 
