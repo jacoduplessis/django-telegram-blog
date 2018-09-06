@@ -1,9 +1,16 @@
 ### 0.5.0
 
-**Unreleased**
+**06/09/2018**
 
 - remove TELEGRAM_BLOG_USE_WEBHOOK setting
 - template updates
+- fix issue with blog without message
+- use global url namespace in test application
+- add pagination
+- add some fields in admin 
+- add indexes to database fields
+- add support for channels
+
 
 ### 0.4.2
 

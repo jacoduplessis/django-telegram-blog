@@ -40,7 +40,7 @@ You have two choices:
 
 - entry deletion
 - no webp/sticker in firefox
-- django admin
 - group without message (created on bot add) does not have attr message_time
 - file storage as celery task
-- pagination
+- urlize filter should add target="_blank"
+- keep original message time for edited messages
