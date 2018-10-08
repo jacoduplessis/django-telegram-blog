@@ -1,6 +1,6 @@
 ### 0.6.0
 
-**08/10/2016**
+**08/10/2018**
 
 - admin: make raw json editable again
 - add "UTC" to message time in template
