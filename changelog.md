@@ -1,9 +1,11 @@
 ### 0.6.0
 
-**Unreleased**
+**08/10/2016**
 
 - admin: make raw json editable again
 - add "UTC" to message time in template
+- add URL namespaces
+- fix template issue if blog has no messages
 
 ### 0.5.1
 

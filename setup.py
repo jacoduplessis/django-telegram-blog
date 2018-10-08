@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="django-telegram-blog",
-    version="0.5.1",
+    version="0.6.0",
     license="MIT",
     description="Blogging for Django via Telegram",
     author="Jaco du Plessis",
