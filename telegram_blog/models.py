@@ -84,7 +84,7 @@ class Blog(models.Model):
     def last_updated(self):
         most_recent_message = self.entries.order_by('-message_time').first()
         if most_recent_message is None:
-            return '---'
+            return None
         return most_recent_message.message_time
 
 
