@@ -16,7 +16,7 @@
       {% endif %}
       <h2><a href="{% url 'telegram_blog:blog_detail' blog.pk %}">{{ blog.title }}</a></h2>
       <p>{{ blog.entries.count }} entries</p>
-      <p>Updated {{ blog.last_updated|timesince }} ago</p>
+      {% if blog.last_updated %}<p>Updated {{ blog.last_updated|timesince }} ago</p>{% endif %}
     </div>
 
   {% endfor %}
