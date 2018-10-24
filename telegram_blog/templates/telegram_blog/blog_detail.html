@@ -1,5 +1,7 @@
 {% extends 'telegram_blog/base.html' %}
 
+{% load telegram_blog %}
+
 {% block title %}{{ blog.title }}{% endblock %}
 
 {% block content %}
@@ -9,7 +11,13 @@
       <img src="{{ blog.photo_url_small }}">
     {% endif %}
     <h1>{{ blog.title }}</h1>
+    {% if chrono %}
+      <p><a href="{% url 'telegram_blog:blog_detail' blog.pk %}">view newest entries first</a></p>
+    {% else %}
+      <p><a href="{% url 'telegram_blog:blog_detail' blog.pk %}?chrono=1">view in chronological order</a></p>
+    {% endif %}
   </div>
+
   <hr style="max-width: 300px; color: #ccc">
   {% for entry in entries %}
 
@@ -20,7 +28,7 @@
           <span>{{ entry.message.from.first_name }}</span>
         {% endif %}
         {% if entry.message.author_signature %}
-        <span>{{ entry.message.author_signature }}</span>
+          <span>{{ entry.message.author_signature }}</span>
         {% endif %}
       </div>
 
@@ -34,17 +42,15 @@
   <div class="pagination">
     <span class="step-links">
         {% if entries.has_previous %}
-          <a href="?page=1">&laquo; first</a>
-          <a href="?page={{ entries.previous_page_number }}">previous</a>
+          <a href="{% add_qsarg 'page' 1 %}">&laquo; first</a>
+          <a href="{% add_qsarg 'page' entries.previous_page_number %}">previous</a>
         {% endif %}
 
-      <span class="current">
-            Page {{ entries.number }} of {{ entries.paginator.num_pages }}.
-        </span>
+      <span class="current">Page {{ entries.number }} of {{ entries.paginator.num_pages }}.</span>
 
       {% if entries.has_next %}
-        <a href="?page={{ entries.next_page_number }}">next</a>
-        <a href="?page={{ entries.paginator.num_pages }}">last &raquo;</a>
+        <a href="{% add_qsarg 'page' entries.next_page_number %}">next</a>
+        <a href="{% add_qsarg 'page' num_pages %}">last &raquo;</a>
       {% endif %}
     </span>
   </div>

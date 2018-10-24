@@ -34,10 +34,15 @@ class BlogDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
-        entries = Entry.objects.filter(
-            blog=self.object,
-        ).order_by('-message_time')
+        chrono = self.request.GET.get('chrono')
+        entries = Entry.objects.filter(blog=self.object)
+        if chrono:
+            entries = entries.order_by('message_time')
+        else:
+            entries = entries.order_by('-message_time')
+
         paginator = Paginator(entries, 20)
         page = self.request.GET.get('page')
         ctx['entries'] = paginator.get_page(page)
+        ctx['chrono'] = chrono
         return ctx

@@ -1,3 +1,9 @@
+### 0.6.1
+
+**24/10/2018**
+
+- add ability to view blog in chronological order
+
 ### 0.6.0
 
 **08/10/2018**
