@@ -42,15 +42,15 @@
   <div class="pagination">
     <span class="step-links">
         {% if entries.has_previous %}
-          <a href="{% add_qsarg 'page' 1 %}">&laquo; first</a>
-          <a href="{% add_qsarg 'page' entries.previous_page_number %}">previous</a>
+          <a href="{% set_qsarg 'page' 1 %}">&laquo; first</a>
+          <a href="{% set_qsarg 'page' entries.previous_page_number %}">previous</a>
         {% endif %}
 
       <span class="current">Page {{ entries.number }} of {{ entries.paginator.num_pages }}.</span>
 
       {% if entries.has_next %}
-        <a href="{% add_qsarg 'page' entries.next_page_number %}">next</a>
-        <a href="{% add_qsarg 'page' num_pages %}">last &raquo;</a>
+        <a href="{% set_qsarg 'page' entries.next_page_number %}">next</a>
+        <a href="{% set_qsarg 'page' entries.paginator.num_pages %}">last &raquo;</a>
       {% endif %}
     </span>
   </div>
