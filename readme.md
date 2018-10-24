@@ -18,18 +18,10 @@ TELEGRAM_BLOG_URL = 'https://example.com'  # base URL if using webhooks
 TELEGRAM_BLOG_WEBHOOK_MAX_CONNECTIONS = 40  # see Telegram docs
 ```
 
-To run the frontend, you need to set the `telegram_blog.urls` as the URL conf for the incoming
-request. This can be done using middleware and setting the `request.urlconf` attribute. 
-
-> The reason for this is that this project was originally created for hosting 
-> on a subdomain of a Django instance and setting the `urlconf`
-> attribute does not work when using URL namespaces.
+Include `telegram_blog.urls` in your URL config.
 
 Each chat that communicates with the bot will create a new `Blog` model.
-
 Each message sent creates a new `Entry` model.
-
-
 
 ### Getting Updates
 
@@ -46,3 +38,4 @@ You have two choices:
 - urlize filter should add target="_blank"
 - analytics
 - update profile pic after change
+- process .gpx uploads to show map
